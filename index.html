@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EMCO 180 Precision Bot</title>
+    <style>
+        *{margin:0;padding:0;box-sizing:border-box}:root{--bg-primary:#0a0e17;--bg-secondary:#111827;--bg-tertiary:#1f2937;--accent-primary:#00d4ff;--accent-secondary:#00ff88;--accent-danger:#ff4757;--accent-warning:#ffa502;--text-primary:#f1f5f9;--text-secondary:#94a3b8;--border-color:#2d3748}body{font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;background:var(--bg-primary);color:var(--text-primary);min-height:100vh;overflow-x:hidden}.container{max-width:1400px;margin:0 auto;padding:20px}header{text-align:center;padding:30px 0;border-bottom:2px solid var(--accent-primary);margin-bottom:30px;background:linear-gradient(135deg,var(--bg-secondary) 0%,var(--bg-primary) 100%)}h1{font-size:2.5rem;background:linear-gradient(90deg,var(--accent-primary),var(--accent-secondary));-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:10px;letter-spacing:2px}.subtitle{color:var(--text-secondary);font-size:1.1rem}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(350px,1fr));gap:20px;margin-bottom:20px}.panel{background:var(--bg-secondary);border-radius:12px;padding:20px;border:1px solid var(--border-color);box-shadow:0 4px 6px rgba(0,0,0,0.3)}.panel-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:15px;padding-bottom:10px;border-bottom:1px solid var(--border-color)}.panel-title{font-size:1.1rem;color:var(--accent-primary);font-weight:600;display:flex;align-items:center;gap:8px}.status-indicator{width:12px;height:12px;border-radius:50%;background:var(--accent-danger);box-shadow:0 0 10px currentColor;transition:all .3s ease}.status-indicator.connected{background:var(--accent-secondary)}.status-indicator.connecting{background:var(--accent-warning);animation:pulse 1s infinite}@keyframes pulse{0%,100%{opacity:1}50%{opacity:.5}}.form-group{margin-bottom:15px}label{display:block;margin-bottom:5px;color:var(--text-secondary);font-size:.9rem;font-weight:500}input,select{width:100%;padding:10px 12px;background:var(--bg-tertiary);border:1px solid var(--border-color);border-radius:6px;color:var(--text-primary);font-size:.95rem;transition:all .3s ease}input:focus,select:focus{outline:none;border-color:var(--accent-primary);box-shadow:0 0 0 3px rgba(0,212,255,0.1)}button{padding:12px 24px;border:none;border-radius:6px;font-size:.95rem;font-weight:600;cursor:pointer;transition:all .3s ease;text-transform:uppercase;letter-spacing:.5px}.btn-primary{background:linear-gradient(135deg,var(--accent-primary),#0099cc);color:white}.btn-primary:hover:not(:disabled){transform:translateY(-2px);box-shadow:0 4px 12px rgba(0,212,255,0.4)}.btn-success{background:linear-gradient(135deg,var(--accent-secondary),#00cc6a);color:white}.btn-success:hover:not(:disabled){transform:translateY(-2px);box-shadow:0 4px 12px rgba(0,255,136,0.4)}.btn-danger{background:linear-gradient(135deg,var(--accent-danger),#cc3344);color:white}.btn-danger:hover:not(:disabled){transform:translateY(-2px);box-shadow:0 4px 12px rgba(255,71,87,0.4)}button:disabled{opacity:.6;cursor:not-allowed}.stats-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:15px}.stat-card{background:var(--bg-tertiary);padding:15px;border-radius:8px;text-align:center;border:1px solid var(--border-color)}.stat-label{font-size:.8rem;color:var(--text-secondary);margin-bottom:5px;text-transform:uppercase;letter-spacing:.5px}.stat-value{font-size:1.4rem;font-weight:700;color:var(--text-primary)}.stat-value.positive{color:var(--accent-secondary)}.stat-value.negative{color:var(--accent-danger)}.confidence-meter{width:100%;height:30px;background:var(--bg-tertiary);border-radius:15px;overflow:hidden;margin-top:10px;position:relative}.confidence-fill{height:100%;background:linear-gradient(90deg,var(--accent-danger),var(--accent-warning),var(--accent-secondary));transition:width .5s ease;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:.9rem}.signal-display{padding:20px;border-radius:8px;text-align:center;margin-top:15px;border:2px solid transparent;transition:all .3s ease}.signal-display.bull{background:rgba(0,255,136,0.1);border-color:var(--accent-secondary)}.signal-display.bear{background:rgba(255,71,87,0.1);border-color:var(--accent-danger)}.signal-display.neutral{background:var(--bg-tertiary);border-color:var(--border-color)}.signal-direction{font-size:1.5rem;font-weight:700;margin-bottom:10px}.bull{color:var(--accent-secondary)}.bear{color:var(--accent-danger)}.log-container{max-height:300px;overflow-y:auto;background:var(--bg-tertiary);border-radius:8px;padding:10px;font-family:'Courier New',monospace;font-size:.85rem}.log-entry{padding:6px 8px;margin-bottom:4px;border-radius:4px;border-left:3px solid transparent}.log-entry.info{border-left-color:var(--accent-primary);background:rgba(0,212,255,0.05)}.log-entry.success{border-left-color:var(--accent-secondary);background:rgba(0,255,136,0.05)}.log-entry.error{border-left-color:var(--accent-danger);background:rgba(255,71,87,0.05)}.log-entry.warning{border-left-color:var(--accent-warning);background:rgba(255,165,2,0.05)}.log-time{color:var(--accent-primary);margin-right:8px}.control-buttons{display:flex;gap:10px;margin-top:15px}.control-buttons button{flex:1}.market-quality{display:flex;gap:10px;flex-wrap:wrap;margin-top:10px}.quality-badge{padding:5px 10px;border-radius:20px;font-size:.8rem;background:var(--bg-tertiary);border:1px solid var(--border-color)}.quality-badge.good{border-color:var(--accent-secondary);color:var(--accent-secondary)}.quality-badge.bad{border-color:var(--accent-danger);color:var(--accent-danger)}.checkbox-group{display:flex;align-items:center;gap:10px;margin-top:10px}input[type="checkbox"]{width:auto;cursor:pointer}.trades-table{width:100%;border-collapse:collapse;font-size:.85rem}.trades-table th,.trades-table td{padding:8px;text-align:left;border-bottom:1px solid var(--border-color)}.trades-table th{color:var(--accent-primary);font-weight:600}.trades-table tr:hover{background:var(--bg-tertiary)}.win{color:var(--accent-secondary)}.loss{color:var(--accent-danger)}.progress-bar{width:100%;height:8px;background:var(--bg-tertiary);border-radius:4px;overflow:hidden;margin-top:5px}.progress-fill{height:100%;background:var(--accent-primary);transition:width .3s ease}@media(max-width:768px){.grid{grid-template-columns:1fr}h1{font-size:1.8rem}}
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>EMCO 180 PRECISION BOT</h1>
+            <p class="subtitle">Advanced Reversal Pattern Detection & Automated Trading</p>
+        </header>
+
+        <div class="grid">
+            <div class="panel">
+                <div class="panel-header">
+                    <span class="panel-title">🔌 Connection</span>
+                    <div class="status-indicator" id="connectionStatus"></div>
+                </div>
+                <div class="form-group">
+                    <label>API Token</label>
+                    <input type="password" id="apiToken" placeholder="Enter your Deriv API token">
+                </div>
+                <button class="btn-primary" id="connectBtn">Connect</button>
+                <div class="stats-grid" style="margin-top: 15px;">
+                    <div class="stat-card">
+                        <div class="stat-label">Balance</div>
+                        <div class="stat-value" id="balanceDisplay">--</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-label">Currency</div>
+                        <div class="stat-value" id="currencyDisplay">--</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="panel">
+                <div class="panel-header">
+                    <span class="panel-title">📊 Market Setup</span>
+                </div>
+                <div class="form-group">
+                    <label>Market Index</label>
+                    <select id="marketSelect">
+                        <option value="R_10">Volatility 10 Index</option>
+                        <option value="R_25">Volatility 25 Index</option>
+                        <option value="R_50">Volatility 50 Index</option>
+                        <option value="R_75">Volatility 75 Index</option>
+                        <option value="R_100">Volatility 100 Index</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Candle Timeframe</label>
+                    <select id="timeframeSelect">
+                        <option value="60">1 Minute</option>
+                        <option value="300">5 Minutes</option>
+                    </select>
+                </div>
+                <div class="market-quality" id="marketQuality">
+                    <span class="quality-badge">Quality tracking active</span>
+                </div>
+            </div>
+
+            <div class="panel">
+                <div class="panel-header">
+                    <span class="panel-title">🛡️ Risk Management</span>
+                </div>
+                <div class="form-group">
+                    <label>Risk Per Trade (%)</label>
+                    <input type="number" id="riskPercent" value="2" min="0.1" max="10" step="0.1">
+                </div>
+                <div class="form-group">
+                    <label>Daily Profit Target (%)</label>
+                    <input type="number" id="profitTarget" value="10" min="1" max="50" step="1">
+                </div>
+                <div class="form-group">
+                    <label>Daily Loss Limit (%)</label>
+                    <input type="number" id="lossLimit" value="6" min="1" max="20" step="1">
+                </div>
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-label">Daily P/L</div>
+                        <div class="stat-value" id="dailyPL">0.00</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-label">Progress</div>
+                        <div class="progress-bar">
+                            <div class="progress-fill" id="dailyProgress" style="width: 0%"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="panel">
+                <div class="panel-header">
+                    <span class="panel-title">🤖 Bot Controls</span>
+                </div>
+                <div class="control-buttons">
+                    <button class="btn-success" id="startBtn" disabled>Start Trading</button>
+                    <button class="btn-danger" id="stopBtn" disabled>Stop Trading</button>
+                </div>
+                <div class="checkbox-group">
+                    <input type="checkbox" id="simulationMode" checked>
+                    <label for="simulationMode" style="margin: 0;">Simulation Mode (No real trades)</label>
+                </div>
+                <div class="signal-display neutral" id="signalDisplay">
+                    <div class="signal-direction" id="signalDirection">WAITING FOR SIGNAL</div>
+                    <div id="signalDetails">Bot ready to analyze market</div>
+                    <div class="confidence-meter">
+                        <div class="confidence-fill" id="confidenceFill" style="width: 0%">0%</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="panel">
+                <div class="panel-header">
+                    <span class="panel-title">📈 Performance Stats</span>
+                </div>
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-label">Total Trades</div>
+                        <div class="stat-value" id="totalTrades">0</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-label">Win Rate</div>
+                        <div class="stat-value" id="winRate">0%</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-label">Wins</div>
+                        <div class="stat-value positive" id="totalWins">0</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-label">Losses</div>
+                        <div class="stat-value negative" id="totalLosses">0</div>
+                    </div>
+                </div>
+                <div class="stat-card" style="margin-top: 15px;">
+                    <div class="stat-label">Net Profit</div>
+                    <div class="stat-value" id="netProfit">0.00</div>
+                </div>
+            </div>
+
+            <div class="panel">
+                <div class="panel-header">
+                    <span class="panel-title">💼 Recent Trades</span>
+                </div>
+                <div style="max-height: 200px; overflow-y: auto;">
+                    <table class="trades-table">
+                        <thead>
+                            <tr>
+                                <th>Time</th>
+                                <th>Dir</th>
+                                <th>Result</th>
+                                <th>P/L</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tradesTableBody">
+                            <tr><td colspan="4" style="text-align: center; color: var(--text-secondary);">No trades yet</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <div class="panel">
+            <div class="panel-header">
+                <span class="panel-title">📝 Activity Log</span>
+                <button class="btn-primary" style="padding: 6px 12px; font-size: 0.8rem;" id="clearLogBtn">Clear</button>
+            </div>
+            <div class="log-container" id="activityLog"></div>
+        </div>
+    </div>
+
+    <script>
+        const CONFIG={APP_ID:1089,WS_URL:'wss://ws.derivws.com/websockets/v3',MAX_CANDLES:200,MIN_CONFIDENCE:70,MAX_TRADES_PER_HOUR:2,MIN_CANDLES_BETWEEN_TRADES:5,PAUSE_AFTER_CONSECUTIVE_LOSSES:3,RESUME_AFTER_CANDLES:10,ADAPTIVE_LEARNING_RATE:.1,MARKET_SYMBOLS:{'R_10':'Volatility 10 Index','R_25':'Volatility 25 Index','R_50':'Volatility 50 Index','R_75':'Volatility 75 Index','R_100':'Volatility 100 Index'}};
+        const state={ws:null,isConnected:false,isTrading:false,accountInfo:null,balance:0,currency:'USD',candles:[],currentCandle:null,lastTick:null,ema20:null,pendingProposal:null,openContracts:[],tradeHistory:[],dailyStats:{startBalance:0,currentProfit:0,tradesTaken:0,lastTradeTime:null,candlesSinceLastTrade:0,consecutiveLosses:0,isPaused:false,pauseEndCandle:0},marketQuality:{},adaptiveWeights:{elephant:20,engulf:20,trend:20,exhaustion:15,strength:15,ema:10},signalHistory:[],simulationMode:true};
+        const logger={log(e,t='info'){const n=new Date().toLocaleTimeString(),a=document.getElementById('activityLog'),s=document.createElement('div');s.className=`log-entry ${t}`,s.innerHTML=`<span class="log-time">[${n}]</span>${e}`,a.insertBefore(s,a.firstChild);while(a.children.length>100)a.removeChild(a.lastChild);console.log(`[${t.toUpperCase()}] ${e}`)},clear(){document.getElementById('activityLog').innerHTML='',this.log('Log cleared','info')}};
+        const connectionModule={connect(){const e=document.getElementById('apiToken').value.trim();if(!e)return logger.log('Please enter API token','error'),void this.updateStatus('disconnected');this.updateStatus('connecting'),logger.log('Connecting to Deriv...','info');try{state.ws=new WebSocket(`${CONFIG.WS_URL}?app_id=${CONFIG.APP_ID}`),state.ws.onopen=(()=>{logger.log('WebSocket connected','success'),this.authenticate(e)}),state.ws.onmessage=(e=>{const t=JSON.parse(e.data);this.handleMessage(t)}),state.ws.onerror=(e=>{logger.log('WebSocket error occurred','error'),this.updateStatus('disconnected'),botController.stopTrading()}),state.ws.onclose=(()=>{logger.log('WebSocket disconnected','warning'),this.updateStatus('disconnected'),state.isConnected=false,botController.stopTrading()})}catch(e){logger.log(`Connection failed: ${e.message}`,'error'),this.updateStatus('disconnected')}},authenticate(e){this.send({authorize:e,req_id:1})},send(e){state.ws&&state.ws.readyState===WebSocket.OPEN?state.ws.send(JSON.stringify(e)):logger.log('WebSocket not ready','error')},handleMessage(e){if(e.authorize){state.accountInfo=e.authorize,state.balance=e.authorize.balance,state.currency=e.authorize.currency,state.isConnected=true,state.dailyStats.startBalance=e.authorize.balance,this.updateStatus('connected'),dashboardUpdater.updateAccountInfo(),logger.log(`Authenticated: ${e.authorize.fullname}`,'success'),document.getElementById('startBtn').disabled=false,this.send({balance:1,subscribe:1})}e.balance&&(state.balance=e.balance.balance,dashboardUpdater.updateBalance()),e.tick&&marketDataModule.handleTick(e.tick),e.proposal&&tradeExecutionModule.handleProposal(e.proposal),e.buy&&tradeExecutionModule.handleBuyConfirmation(e.buy),e.proposal_open_contract&&tradeExecutionModule.handleContractUpdate(e.proposal_open_contract),e.error&&(logger.log(`API Error: ${e.error.message}`,'error'),state.isTrading&&botController.stopTrading())},updateStatus(e){const t=document.getElementById('connectionStatus'),n=document.getElementById('connectBtn');t.className='status-indicator '+e,'connected'===e?(n.textContent='Connected',n.disabled=true):'connecting'===e?(n.textContent='Connecting...',n.disabled=true):(n.textContent='Connect',n.disabled=false)},disconnect(){state.ws&&state.ws.close()}};
+        const marketDataModule={subscribeToMarket(){const e=document.getElementById('marketSelect').value;this.send({forget_all:'ticks'}),this.send({ticks:e,subscribe:1}),logger.log(`Subscribed to ${CONFIG.MARKET_SYMBOLS[e]}`,'info'),state.marketQuality[e]||(state.marketQuality[e]={trades:0,wins:0,winRate:50})},send(e){connectionModule.send(e)},handleTick(e){state.lastTick=e,candleBuilder.processTick(e)},changeMarket(){state.isTrading?logger.log('Stop trading before changing market','warning'):(state.candles=[],state.currentCandle=null,this.subscribeToMarket())}};
+        const candleBuilder={processTick(e){const t=parseInt(document.getElementById('timeframeSelect').value),n=e.epoch,a=e.quote,s=Math.floor(n/t)*t;state.currentCandle&&state.currentCandle.time===s?(state.currentCandle.high=Math.max(state.currentCandle.high,a),state.currentCandle.low=Math.min(state.currentCandle.low,a),state.currentCandle.close=a,state.currentCandle.ticks++):(state.currentCandle&&this.finalizeCandle(),state.currentCandle={time:s,open:a,high:a,low:a,close:a,ticks:1}),state.candles.length>=20&&emaCalculator.calculate()},finalizeCandle(){if(!state.currentCandle)return;const e={...state.currentCandle,bodySize:Math.abs(state.currentCandle.close-state.currentCandle.open),direction:state.currentCandle.close>state.currentCandle.open?'bullish':state.currentCandle.close<state.currentCandle.open?'bearish':'neutral',upperWick:state.currentCandle.high-Math.max(state.currentCandle.open,state.currentCandle.close),lowerWick:Math.min(state.currentCandle.open,state.currentCandle.close)-state.currentCandle.low};state.candles.push(e),state.candles.length>CONFIG.MAX_CANDLES&&state.candles.shift(),state.dailyStats.candlesSinceLastTrade++,state.dailyStats.isPaused&&state.dailyStats.candlesSinceLastTrade>=state.dailyStats.pauseEndCandle&&(state.dailyStats.isPaused=false,logger.log('Trading pause ended - resuming operations','info')),state.isTrading&&!state.dailyStats.isPaused&&patternDetectionEngine.analyze(e),dashboardUpdater.updateCandleInfo(e)},getAverageBody(e=10){if(state.candles.length<e)return 0;return state.candles.slice(-e).reduce((t,n)=>t+n.bodySize,0)/e},getLastCandles(e){return state.candles.slice(-e)}};
+        const emaCalculator={calculate(){if(state.candles.length<20)return null;const e=state.candles.map(e=>e.close),t=2/(20+1);let n=e[0];for(let a=1;a<e.length;a++)n=(e[a]-n)*t+n;return state.ema20=n,n},isAboveEMA:e=>state.ema20&&e>state.ema20,isBelowEMA:e=>state.ema20&&e<state.ema20};
+        const patternDetectionEngine={analyze(e){if(state.candles.length<15)return;const t=state.candles[state.candles.length-2],n=this.getAverageBody(10),a=t.bodySize>1.5*n;if(!a)return;const s='bullish'===t.direction&&a,i='bearish'===t.direction&&a,r=this.checkExhaustion(t.direction);let o=null;s&&this.isBear180(e,t)?o={type:'BEAR_180',direction:'Fall',elephant:t,reversal:e,exhaustion:r}:i&&this.isBull180(e,t)&&(o={type:'BULL_180',direction:'Rise',elephant:t,reversal:e,exhaustion:r}),o&&this.processSignal(o)},checkExhaustion(e){if(state.candles.length<5)return!1;return state.candles.slice(-5,-2).every(t=>t.direction===e)},isBull180(e,t){return'bullish'===e.direction&&e.close>t.high&&e.bodySize>=.8*t.bodySize},isBear180(e,t){return'bearish'===e.direction&&e.close<t.low&&e.bodySize>=.8*t.bodySize},processSignal(e){const t=confidenceScoringEngine.calculate(e);if(dashboardUpdater.updateSignal(e,t),logger.log(`EMCO 180 ${e.type} detected (Confidence: ${t}%)`,'info'),t>=CONFIG.MIN_CONFIDENCE&&this.evaluateTradeEntry(e,t),state.signalHistory.push({...e,confidence:t,timestamp:Date.now(),result:null}),state.signalHistory.length>200)return void state.signalHistory.shift()},evaluateTradeEntry(e,t){if(!riskManager.canTrade())return;const n=state.lastTick?.quote;if(!n||!state.ema20)return;const a=emaCalculator.isAboveEMA(n),s=emaCalculator.isBelowEMA(n);'BULL_180'===e.type&&!a?logger.log('Bull signal rejected - price below EMA20','warning'):'BEAR_180'===e.type&&!s?logger.log('Bear signal rejected - price above EMA20','warning'):(logger.log(`Preparing ${e.direction} trade entry...`,'success'),tradeExecutionModule.prepareEntry(e,t))}};
+        const confidenceScoringEngine={calculate(e){let t=0;const n=state.adaptiveWeights;t+=n.elephant;('BULL_180'===e.type?e.reversal.close>e.elephant.high:e.reversal.close<e.elephant.low)&&(t+=n.engulf);const a=state.lastTick?.quote;if(a&&state.ema20){('BULL_180'===e.type&&a>state.ema20||'BEAR_180'===e.type&&a<state.ema20)&&(t+=n.trend)}return e.exhaustion&&(t+=n.exhaustion),e.reversal.bodySize/e.elephant.bodySize>=.8&&(t+=n.strength),a&&state.ema20&&Math.abs(a-state.ema20)/a<.001&&(t+=n.ema),Math.min(100,Math.round(t))},adaptWeights(e){const t=state.signalHistory.slice(-20).filter(e=>'win'===e.result);if(t.length<5)return;'win'===e?Object.keys(state.adaptiveWeights).forEach(e=>{state.adaptiveWeights[e]=Math.min(25,state.adaptiveWeights[e]*(1+CONFIG.ADAPTIVE_LEARNING_RATE))}):Object.keys(state.adaptiveWeights).forEach(e=>{state.adaptiveWeights[e]=Math.max(5,state.adaptiveWeights[e]*(1-.5*CONFIG.ADAPTIVE_LEARNING_RATE))});const n=Object.values(state.adaptiveWeights).reduce((e,t)=>e+t,0),a=100/n;Object.keys(state.adaptiveWeights).forEach(e=>{state.adaptiveWeights[e]=Math.round(state.adaptiveWeights[e]*a)})}};
+        const tradeExecutionModule={prepareEntry(e,t){const n=riskManager.calculateStake();if(n<=0)return void logger.log('Invalid stake calculated','error');const a=parseInt(document.getElementById('timeframeSelect').value);state.simulationMode?this.simulateTrade(e,n,a,t):(state.pendingProposal={proposal:1,amount:n,basis:'stake',contract_type:'Rise'===e.direction?'CALL':'PUT',currency:state.currency,duration:a/60,duration_unit:'m',symbol:document.getElementById('marketSelect').value,req_id:Date.now(),signal:e,confidence:t,stake:n},connectionModule.send({proposal:1,amount:n,basis:'stake',contract_type:'Rise'===e.direction?'CALL':'PUT',currency:state.currency,duration:a/60,duration_unit:'m',symbol:document.getElementById('marketSelect').value,req_id:Date.now()}),logger.log(`Proposal requested: ${e.direction} $${n}`,'info'))},handleProposal(e){if(!state.pendingProposal)return;logger.log(`Proposal received: ${e.id}`,'info'),connectionModule.send({buy:e.id,price:state.pendingProposal.stake,req_id:Date.now()})},handleBuyConfirmation(e){if(!state.pendingProposal)return;const t={contract_id:e.contract_id,signal:state.pendingProposal.signal,confidence:state.pendingProposal.confidence,stake:state.pendingProposal.stake,entryTime:Date.now(),entryPrice:state.lastTick?.quote,direction:state.pendingProposal.signal.direction};state.openContracts.push(t),state.pendingProposal=null,logger.log(`Trade executed: ${t.direction} (ID: ${t.contract_id})`,'success'),dashboardUpdater.addTrade(t),state.dailyStats.tradesTaken++,state.dailyStats.lastTradeTime=Date.now(),state.dailyStats.candlesSinceLastTrade=0,connectionModule.send({proposal_open_contract:1,contract_id:t.contract_id,subscribe:1})},handleContractUpdate(e){(e.is_expired||e.is_sold)&&this.closeContract(e)},closeContract(e){const t=state.openContracts.find(t=>t.contract_id===e.contract_id);if(!t)return;const n=e.profit,a=n>0?'win':'loss';t.result=a,t.profit=n,t.exitPrice=e.exit_tick,t.exitTime=Date.now(),state.tradeHistory.unshift(t),state.tradeHistory.length>100&&state.tradeHistory.pop(),state.openContracts=state.openContracts.filter(e=>e.contract_id!==t.contract_id),state.dailyStats.currentProfit+=n,'loss'===a?(state.dailyStats.consecutiveLosses++,state.dailyStats.consecutiveLosses>=CONFIG.PAUSE_AFTER_CONSECUTIVE_LOSSES&&this.triggerPause()):state.dailyStats.consecutiveLosses=0,this.updateMarketQuality(a),confidenceScoringEngine.adaptWeights(a);const s=state.signalHistory.find(e=>Math.abs(e.timestamp-t.entryTime)<5e3);s&&(s.result=a),riskManager.checkLimits(),dashboardUpdater.updateTradeResult(t,a),dashboardUpdater.updateStatistics(),logger.log(`Trade closed: ${a.toUpperCase()} P/L: $${n.toFixed(2)}`,'win'===a?'success':'error')},triggerPause(){state.dailyStats.isPaused=true,state.dailyStats.pauseEndCandle=state.dailyStats.candlesSinceLastTrade+CONFIG.RESUME_AFTER_CANDLES,logger.log(`Trading paused after ${CONFIG.PAUSE_AFTER_CONSECUTIVE_LOSSES} consecutive losses`,'warning')},updateMarketQuality(e){const t=document.getElementById('marketSelect').value,n=state.marketQuality[t];n&&(n.trades++,'win'===e&&n.wins++,n.winRate=n.wins/n.trades*100,dashboardUpdater.updateMarketQuality())},simulateTrade(e,t,n,a){setTimeout(()=>{const s={contract_id:`SIM_${Date.now()}`,signal:e,confidence:a,stake:t,entryTime:Date.now(),entryPrice:state.lastTick?.quote||e.reversal.close,direction:e.direction,isSimulation:true};state.openContracts.push(s),state.dailyStats.tradesTaken++,state.dailyStats.lastTradeTime=Date.now(),state.dailyStats.candlesSinceLastTrade=0,logger.log(`[SIM] Trade executed: ${s.direction} $${t}`,'success'),dashboardUpdater.addTrade(s),setTimeout(()=>{this.simulateResult(s)},1e3*n)},500)},simulateResult(e){const t=.55+(e.confidence-70)/100*.2,n=Math.random()<Math.min(.85,t),a=n?e.stake*.94:-e.stake,s=n?'win':'loss';e.result=s,e.profit=a,e.exitPrice=state.lastTick?.quote||e.entryPrice,e.exitTime=Date.now(),state.tradeHistory.unshift(e),state.tradeHistory.length>100&&state.tradeHistory.pop(),state.openContracts=state.openContracts.filter(t=>t.contract_id!==e.contract_id),state.dailyStats.currentProfit+=a,'loss'===s?(state.dailyStats.consecutiveLosses++,state.dailyStats.consecutiveLosses>=CONFIG.PAUSE_AFTER_CONSECUTIVE_LOSSES&&this.triggerPause()):state.dailyStats.consecutiveLosses=0,riskManager.checkLimits(),dashboardUpdater.updateTradeResult(e,s),dashboardUpdater.updateStatistics(),logger.log(`[SIM] Trade closed: ${s.toUpperCase()} P/L: $${a.toFixed(2)}`,n?'success':'error')}};
+        const riskManager={canTrade(){if(!state.isTrading)return!1;if(state.dailyStats.isPaused)return logger.log('Trading paused - waiting for cooldown','warning'),!1;const e=state.tradeHistory.filter(e=>Date.now()-e.entryTime<36e5).length;if(e>=CONFIG.MAX_TRADES_PER_HOUR)return logger.log('Max trades per hour reached','warning'),!1;return!(state.dailyStats.candlesSinceLastTrade<CONFIG.MIN_CANDLES_BETWEEN_TRADES)&&(this.checkLimits()?(logger.log('Daily limits reached','warning'),!1):!0)},calculateStake(){const e=parseFloat(document.getElementById('riskPercent').value)||2,t=state.balance*(e/100);return Math.max(.35,Math.min(t,.05*state.balance))},checkLimits(){const e=parseFloat(document.getElementById('profitTarget').value)||10,t=parseFloat(document.getElementById('lossLimit').value)||6,n=state.dailyStats.currentProfit/state.dailyStats.startBalance*100;return n>=e?(logger.log(`Daily profit target reached: +${n.toFixed(2)}%`,'success'),botController.stopTrading(),!0):n<=-t?(logger.log(`Daily loss limit reached: ${n.toFixed(2)}%`,'error'),botController.stopTrading(),!0):!(state.balance>=1)||(logger.log('Insufficient balance','error'),botController.stopTrading(),!0)},resetDailyStats(){state.dailyStats={startBalance:state.balance,currentProfit:0,tradesTaken:0,lastTradeTime:null,candlesSinceLastTrade:0,consecutiveLosses:0,isPaused:false,pauseEndCandle:0}}};
+        const dashboardUpdater={updateAccountInfo(){document.getElementById('balanceDisplay').textContent=state.balance.toFixed(2),document.getElementById('currencyDisplay').textContent=state.currency},updateBalance(){document.getElementById('balanceDisplay').textContent=state.balance.toFixed(2);const e=state.dailyStats.currentProfit,t=document.getElementById('dailyPL');t.textContent=(e>=0?'+':'')+e.toFixed(2),t.className='stat-value '+(e>=0?'positive':'negative');const n=(parseFloat(document.getElementById('profitTarget').value)||10)+(parseFloat(document.getElementById('lossLimit').value)||6),a=(e/state.dailyStats.startBalance*100+(parseFloat(document.getElementById('lossLimit').value)||6))/n*100;document.getElementById('dailyProgress').style.width=Math.max(0,Math.min(100,a))+'%'},updateCandleInfo(e){},updateSignal(e,t){const n=document.getElementById('signalDisplay'),a=document.getElementById('signalDirection'),s=document.getElementById('signalDetails'),i=document.getElementById('confidenceFill');n.className='signal-display '+('BULL_180'===e.type?'bull':'bear'),a.innerHTML=`<span class="${'BULL_180'===e.type?'bull':'bear'}">${e.type} DETECTED</span>`,a.className='signal-direction '+('BULL_180'===e.type?'bull':'bear'),s.innerHTML=`Elephant: ${e.elephant.direction} | Reversal: ${e.reversal.direction} | Exhaustion: ${e.exhaustion?'Yes':'No'}`,i.style.width=t+'%',i.textContent=t+'% CONFIDENCE'},addTrade(e){const t=document.getElementById('tradesTableBody');1===t.children.length&&t.children[0].textContent.includes('No trades')&&(t.innerHTML='');const n=document.createElement('tr');n.id=`trade_${e.contract_id}`,n.innerHTML=`<td>${new Date(e.entryTime).toLocaleTimeString()}</td><td>${e.direction}</td><td>Open</td><td>--</td>`,t.insertBefore(n,t.firstChild);while(t.children.length>20)t.removeChild(t.lastChild)},updateTradeResult(e,t){const n=document.getElementById(`trade_${e.contract_id}`);n&&(n.innerHTML=`<td>${new Date(e.entryTime).toLocaleTimeString()}</td><td>${e.direction}</td><td class="${t}">${t.toUpperCase()}</td><td class="${t}">${e.profit>=0?'+':''}${e.profit.toFixed(2)}</td>`)},updateStatistics(){const e=state.tradeHistory.length,t=state.tradeHistory.filter(e=>'win'===e.result).length,n=e-t,a=e>0?(t/e*100).toFixed(1):0,s=state.tradeHistory.reduce((e,t)=>e+t.profit,0);document.getElementById('totalTrades').textContent=e,document.getElementById('totalWins').textContent=t,document.getElementById('totalLosses').textContent=n,document.getElementById('winRate').textContent=a+'%';const i=document.getElementById('netProfit');i.textContent=(s>=0?'+':'')+s.toFixed(2),i.className='stat-value '+(s>=0?'positive':'negative'),this.updateBalance()},updateMarketQuality(){const e=document.getElementById('marketQuality'),t=document.getElementById('marketSelect').value;let n='';Object.entries(state.marketQuality).forEach(([e,a])=>{const s=e===t,i=a.winRate>=50;n+=`<span class="quality-badge ${i?'good':'bad'} ${s?'current':''}">${CONFIG.MARKET_SYMBOLS[e]}: ${a.winRate.toFixed(1)}%</span>`}),e.innerHTML=n||'<span class="quality-badge">Collecting data...</span>'},resetSignalDisplay(){const e=document.getElementById('signalDisplay');e.className='signal-display neutral',document.getElementById('signalDirection').textContent='WAITING FOR SIGNAL',document.getElementById('signalDirection').className='signal-direction',document.getElementById('signalDetails').textContent='Bot ready to analyze market',document.getElementById('confidenceFill').style.width='0%',document.getElementById('confidenceFill').textContent='0%'}};
+        const botController={startTrading(){if(!state.isConnected)return void logger.log('Connect to API first','error');if(state.isTrading)return void logger.log('Already trading','warning');state.simulationMode=document.getElementById('simulationMode').checked,state.isTrading=true,0===state.dailyStats.tradesTaken&&riskManager.resetDailyStats(),marketDataModule.subscribeToMarket(),document.getElementById('startBtn').disabled=true,document.getElementById('stopBtn').disabled=false,document.getElementById('marketSelect').disabled=true,document.getElementById('timeframeSelect').disabled=true,logger.log(`Trading started ${state.simulationMode?'[SIMULATION]':'[LIVE]'}`,'success'),logger.log(`Market: ${CONFIG.MARKET_SYMBOLS[document.getElementById('marketSelect').value]}`,'info')},stopTrading(){state.isTrading=false,state.ws&&connectionModule.send({forget_all:'ticks'}),document.getElementById('startBtn').disabled=false,document.getElementById('stopBtn').disabled=true,document.getElementById('marketSelect').disabled=false,document.getElementById('timeframeSelect').disabled=false,dashboardUpdater.resetSignalDisplay(),logger.log('Trading stopped','warning')}};
+        document.addEventListener('DOMContentLoaded',()=>{document.getElementById('connectBtn').addEventListener('click',()=>connectionModule.connect()),document.getElementById('startBtn').addEventListener('click',()=>botController.startTrading()),document.getElementById('stopBtn').addEventListener('click',()=>botController.stopTrading()),document.getElementById('clearLogBtn').addEventListener('click',()=>logger.clear()),document.getElementById('marketSelect').addEventListener('change',()=>{marketDataModule.changeMarket()}),document.getElementById('timeframeSelect').addEventListener('change',()=>{state.isTrading?logger.log('Stop trading before changing timeframe','warning'):(state.candles=[],state.currentCandle=null)})}),window.addEventListener('beforeunload',e=>{state.isTrading&&(e.preventDefault(),e.returnValue='Trading is active. Are you sure you want to leave?')}),logger.log('EMCO 180 Precision Bot initialized','info'),logger.log('Ready to connect','info');
+    </script>
+</body>
+</html>
